@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Gemini AI Chatbot </title>
+
+  <!-- MathJax for LaTeX -->
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+
+  <!-- Style -->
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #031632, #d2dce3);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #chatbox {
+      width: 80%;
+      max-width: 850px;
+      height: 85vh;
+      background: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border-radius: 20px;
+      padding: 25px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    h2 {
+  font-size: 32px;
+  text-align: center;
+  margin-bottom: 50px;
+  font-weight: bold;
+
+  background: linear-gradient(to right, #8a6c6b, #31223f, #0b041d); /* 3-color blend */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+    #typewriter {
+  color: #1d8e94;
+  font-size: 28px;
+  text-align: center;
+  margin-bottom: 20px;
+  font-weight: bold;
+  border-right: 2px solid rgba(22, 78, 138, 0.75);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+    #messages {
+      flex: 1;
+      overflow-y: auto;
+      padding-right: 10px;
+    }
+
+    .msg {
+      margin-bottom: 15px;
+      line-height: 1.5;
+      word-wrap: break-word;
+    }
+
+    .user {
+      background: rgba(17, 8, 69, 0.6);
+      padding: 10px 15px;
+      border-radius: 12px;
+      text-align: right;
+      align-self: flex-end;
+      max-width: 75%;
+    }
+
+    .bot {
+      background: rgba(194, 220, 255, 0.6);
+      padding: 10px 15px;
+      border-radius: 12px;
+      align-self: flex-start;
+      max-width: 90%;
+    }
+
+    #input-area {
+      display: flex;
+      margin-top: 15px;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      outline: none;
+      background: rgba(255, 255, 255, 0.7);
+    }
+
+    button {
+      margin-left: 10px;
+      padding: 12px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      color: white;
+      background: linear-gradient(to right, #667eea, #764ba2,#2f0568);
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background-color: rgba(100, 100, 100, 0.3);
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }#chatbox {
+  width: 80%;
+  max-width: 850px;
+  height: 85vh;
+  padding: 25px;
+  border-radius: 20px;
+  overflow-y: auto;
+
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.5),
+              0 0 25px rgba(0, 100, 255, 0.3),
+              0 0 50px rgba(173, 216, 230, 0.2);
+
+  animation: floaty 6s ease-in-out infinite, neonGlow 5s linear infinite;
+}
+
+
+    @keyframes floaty {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes neonGlow {
+  0% {
+    box-shadow: 0 0 5px #0ff,
+                0 0 10px rgb(55, 146, 146),
+                0 0 20px #00f,
+                0 0 40px #0ff;
+  }
+  50% {
+    box-shadow: 0 0 10px #0ff,
+                0 0 20px #0ff,
+                0 0 30px #00f,
+                0 0 60px #0ff;
+  }
+  100% {
+    box-shadow: 0 0 5px #0ff,
+                0 0 10px #0ff,
+                0 0 20px #00f,
+                0 0 40px #0ff;
+  }
+}
+
+  </style>
+</head>
+
+<body>
+  <div id="chatbox">
+    <h2>GEMINI AI CHATBOT </h2>
+    <h2 id="typewriter"></h2>
+    <div id="messages"></div>
+    <div id="input-area">
+      <input type="text" id="user-input" placeholder="Ask me anything... ">
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+
+  <script>
+    function sendMessage() {
+      const input = document.getElementById('user-input');
+      const message = input.value.trim();
+      if (!message) return;
+
+      const msgDiv = document.getElementById('messages');
+      msgDiv.innerHTML += `<div class="msg user">${message}</div>`;
+
+      fetch('/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message })
+      })
+      .then(res => res.json())
+      .then(data => {
+        msgDiv.innerHTML += `<div class="msg bot">${data.response}</div>`;
+        MathJax.typeset();  // Render Math
+        msgDiv.scrollTop = msgDiv.scrollHeight;  // Auto-scroll
+      });
+
+      input.value = '';
+    }
+  </script>
+  <script>
+  const text = "How Can I Assist You?";
+  const heading = document.getElementById("typewriter");
+  let index = 0;
+
+  function typeWriter() {
+    if (index < text.length) {
+      heading.innerHTML += text.charAt(index);
+      index++;
+      setTimeout(typeWriter, 100); // typing speed (ms)
+    }
+  }
+
+  window.onload = typeWriter;
+</script>
+</body>
+</html>
